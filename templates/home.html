@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Home | Feed{% endblock %}
+{% block content %}
+
+<div class="container">
+  <div class="columns">
+      <div class="column is-3 p-0">
+        <div class="">
+          <h1 class="title is-6 is-uppercase">Recently reading</h1>
+          <p class="block">
+            no books are being readed
+          </p>
+        </div>
+      </div>
+      <div class="column is-6">
+          <h1 class="title is-6 is-uppercase">Updates</h1>
+          {% for review in page.object_list %}
+          <div class="box">
+              <article class="media">
+                <div class="media-left">
+                  <figure class="image is-64x64">
+                    <img class="is-rounded" src="{{ review.user.profile_img.url }}" alt="Image">
+                  </figure>
+                </div>
+                <div class="media-content">
+                  <div class="content">
+                    <p>
+                      <strong><a class="has-text-dark" href="{% url 'users:user-profile' review.user.username %}">{{ review.user.fullName }}</a></strong> <small><a class="has-text-info" href="{% url 'users:user-profile' review.user.username %}">@{{review.user.username}}</a></small> <small class="ml-3">{{review.created | timesince}} ago</small>
+                      <br>
+                      {{ review.body|truncatechars:200 }}
+                    </p>
+                  </div>
+                  <div class="is-flex mb-3">
+                    <small class="mr-5"><a href=""><i class="fa-solid fa-thumbs-up"></i></a> 4 </small><small><a href=""><i class="fa-regular fa-thumbs-down"></i></a> 1 </small>
+                  </div>
+                </div>
+              </article>
+              <div class="is-flex is-justify-content-center mb-4">
+                  <div class="image is-128x128 mb-6">
+                      <a href="{% url 'books:book-detail' review.book.id %}">
+                          <img src="{{ review.book.cover_img.url }}" alt="">
+                      </a>
+                  </div>
+              </div>
+          </div>
+          {% empty %}
+          <h1 class="has-text-centered title is-5 m-4 is-uppercase">No Updates!</h1>
+          {% endfor %}
+          <!-- Pagination -->
+          <nav class="is-flex is-justify-content-center py-5">
+              {% if page.has_previous %}
+                  <a class="has-text-weight-bold mr-3" data-page="{{page.previous_page_number}}" href="?page={{ page.previous_page_number }}">&#xAB;</a>
+              {% endif %}
+              {% if page.has_other_pages %}
+                  {% for num in pages %}
+                      <a class="has-text-weight-bold mx-1 {% if num == page.number %}active__pagin__link{% endif %}" data-page="{{num}}" href="?page={{num}}">{{num}}</a>
+                  {% endfor %}
+              {% endif %}
+              {% if page.has_next %}
+                  <a class="has-text-weight-bold ml-3" data-page="{{page.next_page_number}}" href="?page={{ page.next_page_number }}">&#xbb;</a>
+              {% endif %}
+          </nav>
+      </div>
+      <div class="column is-3 p-0">
+        <div class="">
+          <h1 class="title is-6 is-uppercase">News & Interviews</h1>
+        </div>
+      </div>
+  </div>
+</div>
+
+{% endblock %}

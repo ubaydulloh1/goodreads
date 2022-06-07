@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% block title %}Goodreads | Profile{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="columns">
+            <div class="column is-2">
+                <a class="px-4 py-2 account__settings__link my-1 account__settings__active__link" href="{% url 'users:user-profile' user.username %}"><i class="fa-solid fa-user"></i> Profile</a>
+                
+                {% if user.author == request.user.author %}
+                <a class="px-4 py-2 account__settings__link my-1" href="{% url 'users:author-books' user.username %}"><i class="fa-solid fa-book"></i> My Books</a>
+                <a class="px-4 py-2 account__settings__link my-1" href=""><i class="fa-solid fa-gear"></i> Settings</a>
+                {% else %}
+                <a class="px-4 py-2 account__settings__link my-1" href="{% url 'users:author-books' user.username %}"><i class="fa-solid fa-book"></i> Author Books</a>
+                {% endif %}
+
+            </div>
+            <div class="column is-10">
+                <div class="columns py-4">
+                    <div class="column is-11 m-auto">
+                        <div class="columns m-0">
+                            <div class="column is-2 p-0">
+                                <div class="box image p-0">
+                                    <img class="" src="{{ user.profile_img.url }}" alt="Profile Image" />
+                                </div>
+                            </div>
+                            <div class="column is-10 block has-background-light">
+                                <h3 class="title is-5 block">{{ user.first_name }} {{ user.last_name }}</h3>
+                                <h3 class="">Rankings</h3>
+                                <p class="block"><span class="has-text-weight-bold has-text-primary">8.6</span> *****</p>
+                                <p class="block py-0 px-4">
+                                    <span class="has-text-weight-bold has-text-primary">Bio:</span><span class="has-text-weight-medium"><span class="mr-3"></span>{{ user.author.bio }}</span>
+                                </p>
+
+                                {% if request.user != user %}
+                                    <div class="columns">
+                                        <div class="column is-3">
+                                        <a href="" class="button is-info mr-3">Send Message</a>
+                                        </div>
+                                        <div class="column is-3">
+                                            <a href="" class="button is-info is-outlined">Send Friend Request</a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                
+                                <hr>
+                                <div class="about block">
+                                    <h1 class="title is-5 mb-4 has-text-dark is-uppercase">About Author</h1>
+                                    <h3 class="is-size-6 is-uppercase mb-0">Contact information</h3>
+                                    <div class="px-3 py-1">
+                                        <p class="has-text-weight-medium columns m-0"><span class="column is-3">Phone:</span> <span class="column is-9">+{{ user.author.phone_number }}</span></p>
+                                        <p class="has-text-weight-medium columns m-0"><span class="column is-3">Address:</span> <span class="column is-9">{{ user.author.address }}</span></p>
+                                        <p class="has-text-weight-medium columns m-0"><span class="column is-3">Email:</span> <span class="column is-9">{{user.email}}</span></p>
+                                        <p class="has-text-weight-medium columns m-0"><span class="column is-3">Social networks:</span> <span class="column is-9">
+                                            
+                                            {% if user.author.social_telegram %}
+                                                <a href="{{ user.author.social_telegram }}" class="is-rounded has-background-warning has-text-primary footer__social__icons"><i class="fa-brands fa-telegram"></i>  </a>
+                                            {% endif %}
+
+                                            {% if user.author.social_twitter %}
+                                                <a href="{{ user.author.social_twitter }}" class="is-rounded has-background-warning has-text-primary footer__social__icons"><i class="fa-brands fa-twitter"></i>   </a>
+                                            {% endif %}
+                                            
+                                            {% if user.author.social_instagram %}
+                                                <a href="{{ user.author.social_instagram }}" class="is-rounded has-background-warning has-text-primary footer__social__icons"><i class="fa-brands fa-instagram"></i> </a>
+                                            {% endif %}
+                                            
+                                            {% if user.author.social_facebook %}                                            
+                                                <a href="{{ user.author.social_facebook }}" class="is-rounded has-background-warning has-text-primary footer__social__icons"><i class="fa-brands fa-facebook-f"></i></a>
+                                            {% endif %}
+                                        
+                                        </span>
+                                        </p>
+                                    </div>
+                                    <h3 class="is-size-6 is-uppercase mb-0 mt-4">Basic information</h3>
+                                    <div class="px-3 py-1">
+                                        <p class="has-text-weight-medium columns m-0"><span class="column is-3">Birthday:</span> <span class="column is-9">{{ user.author.birthday }}</span></p>
+                                        <p class="has-text-weight-medium columns m-0"><span class="column is-3">Gender:</span> <span class="column is-9">{{ user.author.gender }}</span></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <h1 class="is-size-5 my-4">Author's Books</h1>
+                                <div class="books columns is-multiline">
+                                    {% for book in user.author.author_book_set.all|slice:":4" %}
+                                    <div class="column is-6">
+                                        <div class="box py-3 px-1">
+                                            <div class="columns">
+                                                <div class="column is-4">
+                                                    <div class="image is-64x64">
+                                                        <a href="{% url 'books:book-detail' book.book.id %}">
+                                                        <img src="{{ book.book.cover_img.url }}" alt="">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="column is-8">
+
+                                                    <div class="block">
+                                                        <h4 class="title is-6 m-0"><a href="{% url 'books:book-detail' book.book.id %}">{{ book.book.title | truncatewords:4 }}</a></h4>
+                                                        <p class="is-size-7">{{ book.book.description | truncatewords:20 }}</p>
+                                                        <p class="is-flex is-justify-content-space-between is-size-7">
+                                                            <small><a href=""><i class="fa-solid fa-thumbs-up"></i></a> 123 <a href=""><i class="fa-regular fa-thumbs-down"></i></a></small><small>{{ book.book.created|date:"d M Y" }}</small>
+                                                        </p>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    
+                                    
+                                </div>
+                                {% if user.author.author_book_set.count > 4 %}
+                                    <p class="has-text-centered"><a href="{% url 'users:author-books' user.username %}">More books</a></p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- <div class="is-flex is-justify-content-center p-5">
+        <a href="{% url 'users:profile-edit' %}" class="button is-info">Edit Profile</a>
+    </div> -->
+{% endblock %}

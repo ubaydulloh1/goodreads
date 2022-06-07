@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Review | Delete{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="columns">
+        <div class="column is-6 m-auto">
+            <div class="box py-6 px-4">
+                <h3 class="title is-5">Are you sure delete '<span class="has-text-info">{{obj.body|truncatewords:3}}</span>'?</h3>
+                <div>
+                    <a href="?delete=yes" class="button is-danger mr-2">Yes</a><a href="{% url 'books:book-detail' obj.book.id %}" class="button">No</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+{% if page == 'add-book' %}
+    Goodreads | Add Book
+{% else %}
+    Goodreads | Edit Book
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+  <div class="columns pt-5 mb-6">
+      <div class="column is-6 m-auto box px-4 py-5">
+        
+        {% if page == 'add-book' %}
+            <h1 class="title is-4 has-text-centered">Add Book</h1>
+
+            <div class="block">
+              <a class="button is-info" href="{{ request.GET.next }}">< Back</a>
+            </div>
+            <form class="form" action="{% url 'books:add-book' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+                <div class="block">
+                    {% for field in form %}
+                        <label class="label has-text-info" for="">{{ field.label }}</label>
+                        {{ field }}
+                        <div class="mb-5"></div>
+                    {% endfor %}
+                </div>
+                <div class="block is-flex is-justify-content-space-between">
+                    <input type="submit" value="Add Book Detail" class="button is-info" />
+                </div>
+            </form>
+
+        {% else %}    
+        <h1 class="title is-4 has-text-centered">Edit Book</h1>
+
+            <div class="block">
+              <a class="button is-info" href="{{ request.GET.next }}">< Back</a>
+            </div>
+            <form class="form" action="{% url 'books:edit-book' book.id %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+                <div class="block">
+                    {% for field in form %}
+                        <label class="label has-text-info" for="">{{ field.label }}</label>
+                        {{ field }}
+                        <div class="mb-5"></div>
+                    {% endfor %}
+                </div>
+                <div class="block is-flex is-justify-content-space-between">
+                    <input type="submit" value="Edit Book Detail" class="button is-info" />
+                </div>
+            </form>
+        {% endif %}
+
+      </div>
+  </div>
+
+{% endblock %}

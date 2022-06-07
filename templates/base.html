@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+{% load static %}
+{% url 'books:books-list' as books_url %}
+{% url 'books:authors' as authors_url %}
+{% url 'users:home' as home_url %}
+{% url 'users:user-profile' as user_profile_url %}
+{% url 'users:profile-edit' as user_profile_edit_url %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Goodreads{% endblock %}</title>
+    <link rel="shortcut icon" href="{% static 'images/goodreads_favicon.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/bulma.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+
+    <!-- Navbar start -->
+  <nav class="navbar is-warning px-4 py-1 mb-5" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      {% if request.user.is_authenticated %}
+        <a class="navbar-item" href="{% url 'users:home' %}">
+      {% else %}
+        <a class="navbar-item" href="{% url 'users:landing-page' %}">
+      {% endif %}
+        <span class="title is-4 has-text-dark">Goodreads</span></a>
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+      
+        <div id="navbarBasicExample" class="navbar-menu">
+          <div class="navbar-start">
+            <a href="{% url 'users:home' %}" class="navbar-item {% if request.path == home_url %}is-active{% endif %} ">
+              Home
+            </a>
+            <a href="{% url 'books:books-list' %}" class="navbar-item {% if request.path == books_url %}is-active{% endif %}">
+              Books
+            </a>
+            <a href="{% url 'books:authors' %}" class="navbar-item {% if request.path == authors_url %}is-active{% endif %}">
+              Authors
+            </a>
+          </div>
+      
+          <div class="navbar-end">
+            <div class="navbar-item">
+              <div class="buttons">
+                
+                {% if request.user.is_authenticated %}
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link {% if request.path == user_profile_url or request.path == user_profile_edit_url %}is-active{% endif %}">
+                      <!-- {{ request.user.username }} -->
+                      <img class="is--rounded" src="{{ request.user.profile_img.url }}" alt="">
+                    </a>
+            
+                    <div class="navbar-dropdown">
+                      <a href="{% url 'users:user-profile' request.user.username %}" class="navbar-item">
+                        Profile
+                      </a>
+                      <hr class="navbar-divider">
+                      <a href="{% url 'users:logout' %}" class="navbar-item">
+                        Log out
+                      </a>
+                    </div>
+                  </div>
+                {% else %}
+                <a href="{% url 'users:login' %}" class="button is-light">
+                  Log in
+                </a>
+                {% endif %}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    <!-- Navbar end -->
+
+    <!-- Messages start -->
+    <div class="flash__messages messages">
+        {% if messages %}
+          {% for message in messages %}
+            <div class="columns">
+              <div class="column is-4 m-auto">
+                <p class="notification is-{{message.tags}} py-2"><button class="delete"></button>{{ message }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+    </div>
+    <!-- Messages end -->
+
+    
+    {% block content %}
+    {% endblock %}
+    
+    <footer class="has-background-warning">
+      <div class="container">
+        <div class="columns">
+          <div class="column is-6">
+            <div class="columns">
+              <div class="column is-4">
+                <div class=" has-text-centered-mobile">
+                  <p class="is-size-6 is-uppercase has-text-weight-medium mb-2">Company</p>
+                  <p>About us</p>
+                  <p>Careers</p>
+                  <p>Terms</p>
+                  <p>Privacy</p>
+                  <p>Help</p>
+                </div>
+              </div>
+              <div class="column is-4 has-text-centered-mobile">
+                <p class="is-size-6 is-uppercase has-text-weight-medium mb-2">Work With Us</p>
+                <p>Authors</p>
+                <p>Advertise</p>
+                <p>Advertise & ads blog</p>
+                <p>API</p>
+              </div>
+              <div class="column is-4 has-text-centered-mobile">
+                <p class="is-size-6 is-uppercase has-text-weight-medium mb-2">Connect</p>
+                <a class="px-1 has-background-light is-rounded has-text-warning footer__social__icons" href=""><i class="fa-brands fa-telegram"></i></a>
+                <a class="px-1 has-background-light is-rounded has-text-warning footer__social__icons" href=""><i class="fa-brands fa-twitter"></i></a>
+                <a class="px-1 has-background-light is-rounded has-text-warning footer__social__icons" href=""><i class="fa-brands fa-instagram"></i></a>
+                <a class="px-1 has-background-light is-rounded has-text-warning footer__social__icons" href=""><i class="fa-brands fa-facebook-f"></i></a>
+              </div>
+            </div>
+          </div>
+  
+          <div class="column is-6">
+            <div class="columns">
+              <div class="column is-6"></div>
+              <div class="column is-6">
+                <div class="columns">
+                  <div class="column has-text-centered">
+                    <img style="width:150px" class="" src="https://d15be2nos83ntc.cloudfront.net/images/badge-apple_app_store@2x.png" alt="">
+                  </div>
+                  <div class="column has-text-centered">
+                    <img style="width:150px" class="" src="https://d15be2nos83ntc.cloudfront.net/images/badge-google_play_store@2x.png" alt="">
+                  </div>
+                </div>
+                <p class="block has-text-centered">
+                  &copy; 2022 Goodreads, Inc
+                </p>
+              </div>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+    </footer>
+</body>
+<script src="{% static 'js/main.js' %}"></script>
+</html>

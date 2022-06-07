@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Review | Edit{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="columns">
+            <div class="column is-6 is-offset-3">
+                <h1 class="title is-4 has-text-centered">Edit Review</h1>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="is-flex">
+                        <div class="image is-48x48 mr-2 mt-4">
+                            <img class="is--rounded" src="{{ request.user.profile_img.url }}" alt="Profile Img">
+                        </div>
+                        <div>
+                            {% for field in review_form %}
+                            <label for="{{field.label}}">
+                                {{field.label}}
+                                {{field}}
+                            </label>
+                            {% endfor %}
+                            <input type="submit" class="button is-info my-2" value="Save" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Goodreads | register{% endblock %}
+
+{% block content %}
+
+    <div class="columns pt-5">
+        <div class="column is-4 is-offset-4 box px-4 py-5">
+            <h1 class="title is-4 has-text-centered">Register Page</h1>
+            <form class="form" action="{% url 'users:register' %}" method="post">{% csrf_token %}
+                <div class="block">
+                    {% for field in form %}
+                        <label class="label has-text-info" for="">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            {{ field.errors }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="block is-flex is-justify-content-space-between">
+                    <input type="submit" value="Submit" class="button is-info" />
+                    <p class="content is-size-6 px-4">Already have an account? <a href="{% url 'users:login' %}">Login</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

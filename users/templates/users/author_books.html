@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% block title %}Goodreads | Author Books{% endblock %}
+
+{% block content %}
+    <div class="container mb-6">
+        <div class="columns">
+            <div class="column is-2">
+                <a class="px-4 py-2 account__settings__link my-1" href="{% url 'users:user-profile' user.username %}"><i class="fa-solid fa-user"></i> Profile</a>
+                
+                {% if user.author == request.user.author %}
+                    <a class="px-4 py-2 account__settings__link my-1 account__settings__active__link" href=""><i class="fa-solid fa-book"></i> My Books</a>
+                    <a class="px-4 py-2 account__settings__link my-1" href=""><i class="fa-solid fa-gear"></i> Settings</a>
+                {% else %}
+                    <a class="px-4 py-2 account__settings__link my-1 account__settings__active__link" href=""><i class="fa-solid fa-book"></i> Author Books</a>
+                {% endif %}
+
+            </div>
+            <div class="column is-10">
+                <div class="columns py-4">
+                    <div class="column is-11 m-auto">
+
+                        <nav class="panel">
+                            <p class="panel-heading">
+                              Repositories
+                            </p>
+                            <div class="panel-block">
+                              <p class="control has-icons-left">
+                                <input class="input" type="text" placeholder="Search">
+                                <span class="icon is-left">
+                                  <i class="fas fa-search" aria-hidden="true"></i>
+                                </span>
+                              </p>
+                            </div>
+                            <p class="panel-tabs">
+                              <a class="is-active">All</a>
+                              <a>Public</a>
+                              <a>Private</a>
+                              <a>Sources</a>
+                              <a>Forks</a>
+                            </p>
+                            <a class="panel-block is-active">
+                              <span class="panel-icon">
+                                <i class="fas fa-book" aria-hidden="true"></i>
+                              </span>
+                              bulma
+                            </a>
+                            <a class="panel-block">
+                              <span class="panel-icon">
+                                <i class="fas fa-book" aria-hidden="true"></i>
+                              </span>
+                              marksheet
+                            </a>
+                            <a class="panel-block">
+                              <span class="panel-icon">
+                                <i class="fas fa-book" aria-hidden="true"></i>
+                              </span>
+                              minireset.css
+                            </a>
+                            <a class="panel-block">
+                              <span class="panel-icon">
+                                <i class="fas fa-book" aria-hidden="true"></i>
+                              </span>
+                              jgthms.github.io
+                            </a>
+                            <a class="panel-block">
+                              <span class="panel-icon">
+                                <i class="fas fa-code-branch" aria-hidden="true"></i>
+                              </span>
+                              daniellowtw/infboard
+                            </a>
+                            <a class="panel-block">
+                              <span class="panel-icon">
+                                <i class="fas fa-code-branch" aria-hidden="true"></i>
+                              </span>
+                              mojs
+                            </a>
+                            <label class="panel-block">
+                              <input type="checkbox">
+                              remember me
+                            </label>
+                            <div class="panel-block">
+                              <button class="button is-link is-outlined is-fullwidth">
+                                Reset all filters
+                              </button>
+                            </div>
+                          </nav>
+
+                        <div class="columns m-0">
+                            <div class="column is-12 block has-background-light">
+
+                                <h1 class="is-size-5 my-4">All Books</h1>
+
+                                {% if request.user.is_authenticated %}
+                                    {% if user.author == request.user.author %}
+                                        <div class="my-3 has-text-right">
+                                            <a href="{% url 'books:add-book' %}?next={{ request.path }}"><button class="button is-info">Add Book</button></a>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+
+                                <div class="books columns is-multiline">
+                                    {% for book in user.author.author_book_set.all %}
+                                    <div class="column is-6">
+                                        <div class="box py-3 px-1">
+                                            <div class="columns">
+                                                <div class="column is-4">
+                                                    <div class="image is-64x64">
+                                                        <a href="{% url 'books:book-detail' book.book.id %}">
+                                                        <img src="{{ book.book.cover_img.url }}" alt="">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="column is-8">
+
+                                                    <div class="block">
+                                                        <h4 class="title is-6 m-0"><a href="{% url 'books:book-detail' book.book.id %}">{{ book.book.title | truncatewords:4 }}</a></h4>
+                                                        <p class="is-size-7">{{ book.book.description | truncatewords:20 }}</p>
+                                                        <p class="is-flex is-justify-content-space-between is-size-7">
+                                                            <small><a href=""><i class="fa-solid fa-thumbs-up"></i></a> 123 <a href=""><i class="fa-regular fa-thumbs-down"></i></a></small><small>{{ book.book.created|date:"d M Y" }}</small>
+                                                        </p>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                            
+                                </div>
+                        
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- <div class="is-flex is-justify-content-center p-5">
+        <a href="{% url 'users:profile-edit' %}" class="button is-info">Edit Profile</a>
+    </div> -->
+{% endblock %}

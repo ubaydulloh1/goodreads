@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}
+Goodreads | Authors
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="columns">
+    <div class="column is-10 m-auto">
+      <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <a href="#">
+              <span class="icon is-small">
+                <i class="fas fa-home" aria-hidden="true"></i>
+              </span>
+              <span>Bulma</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="icon is-small">
+                <i class="fas fa-book" aria-hidden="true"></i>
+              </span>
+              <span>Documentation</span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="icon is-small">
+                <i class="fas fa-puzzle-piece" aria-hidden="true"></i>
+              </span>
+              <span>Components</span>
+            </a>
+          </li>
+          <li class="is-active">
+            <a href="#">
+              <span class="icon is-small">
+                <i class="fas fa-thumbs-up" aria-hidden="true"></i>
+              </span>
+              <span>Breadcrumb</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <p class="is-size-5">Authors</p>
+      {% for author in authors %}
+      <p class="block"><a href="{% url 'users:user-profile' author.user.username %}">{{author}}</a></p>
+      {% endfor %}
+      <article class="panel is-warning">
+        <p class="panel-heading">
+          Warning
+        </p>
+        <p class="panel-tabs">
+          <a class="is-active">All</a>
+          <a>Public</a>
+          <a>Private</a>
+          <a>Sources</a>
+          <a>Forks</a>
+        </p>
+        <div class="panel-block">
+          <p class="control has-icons-left">
+            <input class="input is-warning" type="text" placeholder="Search">
+            <span class="icon is-left">
+              <i class="fas fa-search" aria-hidden="true"></i>
+            </span>
+          </p>
+        </div>
+        <a class="panel-block is-active">
+          <span class="panel-icon">
+            <i class="fas fa-book" aria-hidden="true"></i>
+          </span>
+          bulma
+        </a>
+        <a class="panel-block">
+          <span class="panel-icon">
+            <i class="fas fa-book" aria-hidden="true"></i>
+          </span>
+          marksheet
+        </a>
+        <a class="panel-block">
+          <span class="panel-icon">
+            <i class="fas fa-book" aria-hidden="true"></i>
+          </span>
+          minireset.css
+        </a>
+        <a class="panel-block">
+          <span class="panel-icon">
+            <i class="fas fa-book" aria-hidden="true"></i>
+          </span>
+          jgthms.github.io
+        </a>
+      </article>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

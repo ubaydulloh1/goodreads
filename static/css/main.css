@@ -1,0 +1,74 @@
+
+body{
+    background-color: #F9F7F4 !important;
+    min-height: 100vh;
+}
+
+.profile--img{
+    object-fit: cover;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.book--detail--img{
+    /* object-fit: cover; */
+    width: 500px;
+    /* height: 200px; */
+    /* border-radius: 50%; */
+}
+
+.columns{
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.is--rounded{
+    object-fit: cover;
+    border-radius: 50%;
+}
+.footer__social__icons{
+    display: inline-block;
+    text-align: center;
+    width: 25px !important;
+    height: 25px !important;
+    border-radius: 50%;
+}
+
+.book--cover--list{
+    width: 300px;
+    /* height: 250px; */
+}
+
+.active__pagin__link{
+    color: #111 !important;
+}
+
+.account__settings__link{
+    display: block;
+    color: #333;
+}
+.account__settings__link i{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    color: #333;
+}
+.account__settings__link:hover{
+    background-color:#fff;
+}
+.account__settings__active__link{
+    background-color:#fff;
+}
+
+.checked {
+    color: orange;
+}
+
+.flash__messages{
+    position: fixed !important;
+    width: 100%;
+    z-index: 100;
+}
+
+

@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} {{ book.title }} {% endblock %}
+
+
+{% block content %}
+    <div class="columns py-5 mb-6">
+        <div class="column is-8 is-offset-2">
+            <div class="columns">
+                <!-- <div class=""> -->
+                <div class="column is-4">
+                <img class="book--detail--img" src="{{ book.cover_img.url }}" alt="Book Image">
+                </div>
+                <!-- </div> -->
+                <div class="column is-8 p-4">
+                    <h1 class="title is-4">
+                        {{ book.title }} by 
+                        <span>
+                            {% for author in book.author_book_set.all %}
+                            <i><a class="has-text-info" href="{% url 'users:user-profile' author.author.user.username %}">{{author.author}}</a></i>{% if not forloop.last %},{% endif %}
+                            {% endfor %}
+                        </span>
+                    </h1>
+
+                    {% if request.user.is_authenticated %}
+                        {% if request.user.author in authors %}
+                            <div class="my-3 has-text-right">
+                                <a href="{% url 'books:edit-book' book.id %}?next={{ request.path|urlencode }}"><button class="button is-info">Edit Book</button></a>
+                                <a class="button is-danger" href="{% url 'books:delete-book' book.id %}">Delete</a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                    <p class="block">
+                        {{ book.description|linebreaksbr }}
+                    </p>
+                    <p class="is-flex is-justify-content-space-between">
+                        <small>ISBN: {{ book.isbn }}</small>
+                        <small class="has-text-right">{{ book.created|date:"d M Y" }}</small>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="container hero mt-6">
+                <h1 class="title is-4 mb-2">Community Reviews</h1>
+                <hr class="navbar-divider" />
+                <div class="columns">
+                    
+                    {% if request.user.is_authenticated %}
+                    <div class="column is-9">
+
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <div class="is-flex">
+                                <div class="image is-48x48 mr-2 mt-4">
+                                    <img class="is--rounded" src="{{ request.user.profile_img.url }}" alt="Profile Img">
+                                </div>
+                                <div>
+                                    {{ review_form }}
+                                    <input type="submit" class="button is-info my-2" value="Review" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    {% else %}
+                    <p>
+                        Please <a href="{% url 'users:login' %}?next={{ request.path }}">Login</a> before review this book!
+                    </p>
+                    {% endif %}
+
+                </div>
+                <!-- Book reviews start -->
+                <p>All Reviews <span class="has-text-weight-bold">{{ book.book_review_set.count }}</span></p><hr>
+                {% for review in book.book_review_set.all %}
+                <div class="columns p-3">
+                    <div class="column is-1">
+                        <a href="{% url 'users:user-profile' review.user.username %}"><img class="is--rounded" src="{{ review.user.profile_img.url }}" alt=""></a>
+                    </div>
+                    <div class="column is-10">
+                        <div class="is-flex is-align-items-center">
+                            <span><a href="{% url 'users:user-profile' review.user.username %}" class="has-text-weight-bold has-text-info">{{ review.user.first_name }} {{ review.user.last_name }}</a> rated it <b>{{review.stars_given}}</b> stars</span>
+                            <small class="ml-3">{{ review.created|timesince }} ago</small>
+                            <span class="m-auto"><a class="" href="#"></a><a class="" href="#"></a></span>
+                            <!-- Context menu edit, delete review -->
+                            {% if review.user == request.user %}
+                            <div class="review__context__menu dropdown">
+                                <span class="dropdown-trigger">
+                                  <span class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                                    <span><i class="fas fa-ellipsis-v"></i></span>
+                                  </span>
+                                </span>
+                                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                  <div class="dropdown-content">
+                                    <a href="{% url 'books:book-review-edit' review.id %}" class="dropdown-item">
+                                        <i class="fas fa-edit mr-2"></i> Edit Review
+                                    </a>
+                                    <a href="{% url 'books:book-review-delete' review.id %}" class="dropdown-item">
+                                        <i class="fas fa-trash mr-2"></i> Delete Review
+                                    </a>
+                                  </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <p class="block p-2 mb-0">{{ review.body|linebreaksbr|truncatewords:30 }} <a href=""></a></p>
+                        <div class="is-flex">
+                            <small class="mr-5"><a href=""><i class="fa-solid fa-thumbs-up"></i></a> 4 </small><small><a href=""><i class="fa-regular fa-thumbs-down"></i></a> 1 </small>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="columns p-3">
+                    <h1 class="title is-5">No Reviews!</h1>
+                </div>
+                {% endfor %}
+                <!-- Book reviews stop -->
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

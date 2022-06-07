@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Goodreads | Books{% endblock %}
+
+{% block content %}
+
+<div class="columns py-5">
+    <div class="column is-8 is-offset-2">
+        <h1 class="title is-4">Explore</h1>
+
+        <div class="block columns">
+            <div class="column is-8">
+                <form id="search__form" action="" method="get">
+                    <div class="is-flex">
+                        <input class="input is-info" type="text" value="{{search_query_value}}" placeholder="Search Books" name="q" />
+                        <input class="button is-info ml-1" type="submit" value="&#128269;" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if page.object_list %}
+            {% for book in page.object_list %}
+                <div class="is-flex">
+                    <div class="">
+                        <a href="{% url 'books:book-detail' book.id %}">
+                            <img class="book--cover--list" src="{{ book.cover_img.url }}" alt="">
+                        </a>
+                    </div>
+                    <div class="py-2 px-4">
+                        <a class="is-size-4" href="{% url 'books:book-detail' book.id %}">{{ book.title }}</a>
+                        {% if book.reviews_average > 3 %}
+                        <p><span class="has-text-weight-medium has-text-success">{{ book.reviews_average }}</span> star{{ book.reviews_average|pluralize:'s' }}</p>
+                        {% else %}
+                        <p><span class="has-text-weight-medium has-text-danger">{{ book.reviews_average }}</span> star{{ book.reviews_average|pluralize:'s' }}</p>
+                        {% endif %}
+                        <p>{{ book.description|truncatechars:300 }}</p>
+                        <p class="mt-2">by 
+                            <span>
+                                {% for author in book.author_book_set.all %}
+                                <i><a class="has-text-info" href="{% url 'users:user-profile' author.author.user.username %}">{{author.author}}</a></i>{% if not forloop.last %},{% endif %}
+                                {% endfor %}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+        <ul>
+            <li>No Books Found!</li>
+        </ul>
+        {% endif %}
+        <!-- Pagination -->
+        <nav class="is-flex is-justify-content-center py-5">
+            {% if page.has_previous %}
+                <a class="has-text-weight-bold mr-3 pagination__link" data-page="{{page.previous_page_number}}" href="?page={{ page.previous_page_number }}">&#xAB;</a>
+            {% endif %}
+
+            {% if page.has_other_pages %}
+                {% for num in pages %}
+                    <a class="has-text-weight-bold mx-1 pagination__link {% if num == page.number %}active__pagin__link{% endif %}" data-page="{{num}}" href="?page={{num}}">{{num}}</a>
+                {% endfor %}
+            {% endif %}
+            
+            {% if page.has_next %}
+                <a class="has-text-weight-bold ml-3 pagination__link" data-page="{{page.next_page_number}}" href="?page={{ page.next_page_number }}">&#xbb;</a>
+            {% endif %}
+        </nav>
+    </div>
+
+</div>
+
+{% endblock %}
